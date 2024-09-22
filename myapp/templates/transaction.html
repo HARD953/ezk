@@ -1,0 +1,101 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Transition</title>
+    <link rel="stylesheet" href="{% static 'CSS/style.css' %}" />
+  </head>
+  <body>
+    {% include 'header.html'%}
+    <main>
+      <section>
+        {% include 'sidebar.html'%}
+        <div class="right">
+          <div class="search">
+            <div><h1 style="color:red;">TRANSACTION</h1></div>
+            <form action="{% url 'myapp:transaction' %}" method="post">
+              {% csrf_token %}
+              <ion-icon name="search-sharp"></ion-icon>&nbsp;&nbsp;
+              <label for="nature">Nature : </label>
+              <select name="nature" id="nature">
+                  <option value="All" selected>Tout</option>
+                {% for nature in natures %}
+                  <option value="{{nature.Name}}">{{nature.Name}}</option>
+                {% endfor %}
+                </select>&nbsp;&nbsp;
+              <label for="marque">Marque : </label>
+              <select name="marque" id="marque">
+                  <option value="All" selected>Tout</option>
+                {% for marque in marques %}
+                  <option value="{{marque.Nom}}">{{marque.Nom}}</option>
+                {% endfor %}
+                </select>&nbsp;&nbsp;
+              <label for="numero">Numero : </label>
+              <input type="text" name="numero" id="numero"> &nbsp;
+              &nbsp;&nbsp; <input type="submit" value="Rechercher" style="border-radius: 10px;">
+            </form>
+          </div>
+            <div class="resultat">
+              {% if transactions %}
+                <div class="all">
+                <table>
+                  <thead>
+                    <tr>
+                      <td>Type</td>
+                      <td>Date</td>
+                      <td>Numero</td>
+                      <td>Marque</td>
+                      <td>Détails</td>
+                      <td>Prix</td>
+                      <td>Lieu</td>
+                      <td>Quantité</td>
+                      <td>Valeur</td>
+                      <td>Fournisseur</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for pneu in transactions %}
+                      <tr>
+                        <td>{{pneu.Nature.Name}}</td>
+                        <td>{{pneu.Date|date:"d-m-Y"}}</td>
+                        <td>{{pneu.Numero.Numero}}</td>
+                        <td>{{pneu.Marque.Nom}}</td>
+                        <td>{{pneu.Details}}</td>
+                        <td>{{pneu.Prix}}</td>
+                        <td>{{pneu.Stockage}}</td>
+                        <td>{{pneu.Quantite}}</td>
+                        <td>{{pneu.valeur_restante}}</td>
+                        <td>{{pneu.Fournisseur.Nom}}</td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+                </div>
+                <div class="total" style="flex:1;">
+                  {% if marques %}
+                    {% for marque in marques %}
+                        <span>Total {{marque.Nom}}</span>
+                        <div class="boite">{{marque.Quantite}}</div>
+                    {% endfor %}
+                  {% endif %}
+                </div>
+              {% else %}
+                <h2>AUCUNE TRANSACTION !</h2>
+              {% endif %}
+            </div>
+        </div>
+      </section>
+    </main>
+    <footer></footer>
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
+    ></script>
+  </body>
+</html>

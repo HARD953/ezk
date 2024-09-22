@@ -1,0 +1,85 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Liste des Clients</title>
+    <link rel="stylesheet" href="{% static 'CSS/style.css' %}" />
+  </head>
+  <body>
+    {% include 'header.html'%}
+    <main>
+      <section>
+        {% include 'sidebar.html'%}
+        <div class="right">
+            <div class="search">
+              <div><h1 style="color:red;">LISTE DES CLIENTS</h1></div>
+              <form action="{% url 'myapp:list_client' %}" method="post">
+                {% csrf_token %}
+                <ion-icon name="search-sharp"></ion-icon>&nbsp;&nbsp;
+                <input type="search" name="search" required>
+                &nbsp;&nbsp;<input type="submit" value="Rechercher" style="border-radius: 10px;">
+            </form>
+            </div>
+          <div class="resultat">
+            <div class="all">
+              {% if clients %}
+              <table>
+                <thead>
+                  <tr>
+                    <td>Nom du client</td>
+                    <td>Contact</td>
+                    <td>Statut</td>
+                    <td>Montant</td>
+                  </tr>
+                </thead>
+                <tbody>
+
+                  {% for client in clients %}
+                    <tr>
+                      <td><a href="{% url 'myapp:historique' client.idClient %}">{{client.Nom}}</a></td>
+                      <td>{{client.Contact}}</td>
+                      {% if client.montant_total_restant < 0 %}
+                        <td class="credit">Credit</td>
+                      {% elif client.montant_total_restant == 0 %}
+                        <td class="solde">Solde</td>
+                      {% else %}
+                        <td class="debit">Debit</td>
+                      {% endif %}
+                      <td>{{ client.montant_total_restant }}</td>
+                    </tr>
+                  {% endfor %}
+                {% else %}
+                  <h2>AUCUN CLIENT !</h2>
+                {% endif %}
+                </tbody>
+              </table>
+            </div>
+            {% if clients %}
+            <div class="total">
+              <span>Montant Credit Total</span>
+
+                <div class="boite">
+                  {% if montant_credit %}
+                  {{montant_credit}}
+                  {%else%}
+                  0
+                  {%endif%}
+                </div>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </section>
+    </main>
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
+    ></script>
+  </body>
+</html>

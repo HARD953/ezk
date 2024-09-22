@@ -1,0 +1,6 @@
+<div class="left">
+    {% if user.is_authenticated and user.is_staff %}<h5 class="box"><a target="_blank" href="/admin">PANEL ADMIN</a></h2>{% endif %}
+    <h5 class="box"><a href="{% url 'myapp:list_client' %}">LISTE DES CLIENTS</a></h2>
+    <h5 class="box"><a href="{% url 'myapp:credit' %}">CREDIT</a></h2>
+    <h5 class="box"><a href="{% url 'myapp:transaction' %}">TRANSACTION</a></h2>
+</div>

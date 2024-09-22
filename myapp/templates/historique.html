@@ -1,0 +1,127 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Historique {{client.Nom}}</title>
+    <link rel="stylesheet" href="{% static 'CSS/style.css' %}" />
+  </head>
+  <body>
+    {% include 'header.html'%}
+    <main>
+      <section>
+        {% include 'sidebar.html'%}
+        <div class="right">
+          <h2 style="font-size: 35px; margin-left:200px">
+            Historique : {{client.Nom}}
+          </h2 >
+          <h3 style="margin-left:200px">Versement ou Remboursement:</h3>
+          <div class="search">
+            <a href="{% url 'myapp:achat' client.idClient %}">
+              <button><b><ion-icon name="add-outline" class="plus"></ion-icon> Achat</b></button>
+            </a>
+            <form action="{% url 'myapp:historique' client.idClient %}" method="post">
+              {% csrf_token %}
+              <label for="date">Date : </label
+              ><input
+                type="date"
+                name="date"
+                id="date"
+                class="Versement"
+                required
+              />&nbsp; <label for="motif">Motif : </label
+              >
+              <select name="motif" id="motif">
+                <option value="Paiement de dette">Paiement de dette</option>
+                <option value="Remboursement client">Remboursement client</option>
+              </select>
+              &nbsp; <label for="montant">Montant : </label
+              ><input
+                type="number"
+                name="montant"
+                id="montant"
+                required
+              />
+              &nbsp;
+              &nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;
+                <input
+                type="submit"
+                value="Valider"
+                style="
+                  background-color: rgb(29, 193, 29);
+                  color: #fff;
+                  font-size: 20px;
+                  cursor: pointer;
+                  padding: 5px;
+                  width: 80px;
+                  marque-left:50px;
+                  border-radius: 10px;
+                  margin-top: 5px;
+                "
+              />
+            </form>
+          </div>
+          <br />
+          <div class="resultat">
+            <div class="all">
+              <table>
+                <thead>
+                  <tr>
+                    <td>Date</td>
+                    <td>Designation Articles</td>
+                    <td>Montant Total</td>
+                    <td>Montant Payé</td>
+                    <td>Montant Restant</td>
+                    <td>Satut Achat</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for historique in historiques %}
+                    <tr>
+                      <td>{{historique.Date_Achat | date:"d-m-Y"}}</td>
+                      <td>{{historique.Designation}}</td>
+                      <td>{{historique.Montant_Total}}</td>
+                      <td>{{historique.Montant_Paye}}</td>
+                      <td>{{historique.Montant_Restant}}</td>
+                      {% if historique.Montant_Restant > 0 %}
+                        <td class="debit">Debit</td>
+                      {% elif historique.Montant_Restant == 0 %}
+                        <td class="solde">Soldé</td>
+                      {% else %}
+                      <td class="credit">Credit</td>
+                      {% endif %}
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            <div class="total">
+              <span>Total Credit </span>
+              <div class="boite">{{montant_credit}}</div>
+              <span>Total Achat</span>
+              <div class="boite">{{montant_achat}}</div>
+              <span>Statut Client</span>
+              {% if client.etat_compte == 3 %}
+              <div class="boite" style="color:blue; font-weight: bold;">Debit</div>
+              {% elif client.etat_compte == 2 %}
+                <div class="boite" style="color:green; font-weight: bold;">Soldé</div>
+              {% else %}
+                <div class="boite" style="color:red; font-weight: bold;">Crédit</div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
+    ></script>
+  </body>
+</html>

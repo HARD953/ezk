@@ -1,0 +1,119 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Entre</title>
+    <link rel="stylesheet" href="{% static 'CSS/style.css' %}" />
+  </head>
+  <body>
+    {% include 'header.html'%}
+    <main>
+      <section>
+        {% include 'sidebar.html'%}
+        <div class="right">
+          {% if message %}
+            <h2>{{message}}</h2>
+          {% endif %}
+          <div><h1 style="color:red;">ENTREE</h1></div>
+          <form action="{% url 'myapp:entre' %}" class="ajout" method="get">
+            {% csrf_token %}
+            <label for="ajout">Ajouter une nouvelle marque : </label
+            >&nbsp;<input type="text" name="ajout" id="ajout" required />
+            <button type="submit" name="submit">
+              <ion-icon class="add" name="add"></ion-icon>
+            </button>
+          </form>
+          <form action="{% url 'myapp:entre' %}" method="post">
+            {% csrf_token %}
+            <table
+              class="table"
+              border="2"
+              style="border-collapse: collapse;
+              position: relative;
+              left: 475px;
+              top: 0;"
+            >
+              <thead>
+                <tr>
+                  <td><label for="nom_client">NOM FOURNISSEUR</label></td>
+                  <td><label for="contact">CONTACT</label></td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <input
+                      type="text"
+                      name="nom_fournisseur"
+                      id="nom_client"
+                      placeholder="NOM FOURNISSEUR"
+                      required
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="tel"
+                      name="contact_fournisseur"
+                      id="contact"
+                      placeholder="CONTACT FOURNISSEUR"
+                      required
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="resultat">
+              <div class="all" style="margin-right: 10px; margin-left: 1px;">
+                <label
+                  align="center"
+                  for="date"
+                  style="font-weight: bold; font-size: 25px"
+                  >Date : </label
+                >
+                <input type="date" id="date" name="date" align="center" required style="font-size: 20px;"/>&nbsp;&nbsp;
+                <label for="nombre_de_lignes" id="label">Nombre de ligne : </label>
+                <input type="number" name="nombre_de_lignes" id="nombre_de_lignes">&nbsp;&nbsp;
+                <input required type="button" id="addRowBtn" value="Ajouter">&nbsp;&nbsp;
+                <br><br>
+                {% if message %}
+                  <h2 style="color:red;">{{message}}</h2>
+                {% endif %}
+                <table id="tableID">
+                  <thead>
+                    <tr>
+                      <td><label>Nature</label></td>
+                      <td><label>Marque</label></td>
+                      <td><label>Numero</label></td>
+                      <td><label>Details</label></td>
+                      <td><label>Prix</label></td>
+                      <td><label>Stockage</label></td>
+                      <td><label>Quantite</label></td>
+                      <td><label>Montant</label></td>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+                <div class="ui">
+                  <input type="reset" class="annuler" value="Annuler">
+                  <input type="submit" class="save" value="Enregistrer">
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </section>
+    </main>
+    <footer></footer>
+    <script src="{% static 'JS/entre.js' %}"></script>
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
+    ></script>
+  </body>
+</html>

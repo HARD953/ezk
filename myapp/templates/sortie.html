@@ -1,0 +1,237 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sortie</title>
+    <link rel="stylesheet" href="{% static 'CSS/style.css' %}" />
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        var addRowBtn = document.getElementById("addRowBtn");
+        var nombreDeLignesInput = document.getElementById("nombre_de_lignes");
+        var form = document.querySelector("form.ajout");
+        var table = document.getElementById("tableID");
+        var label = document.getElementById("label");
+    
+        addRowBtn.addEventListener("click", function () {
+            // Récupérer le nombre de lignes à ajouter
+            var nombreDeLignes = parseInt(nombreDeLignesInput.value);
+    
+            // Cacher l'input et le bouton après le premier clic
+            nombreDeLignesInput.style.display = "none";
+            addRowBtn.style.display = "none";
+            label.style.display = "none";
+    
+            // Récupérer la liste des marques via une requête HTTP
+            var urls = ["/get_marques", "/get_natures", "/get_numeros"];
+    
+            // Récupérer la liste des marques via une requête HTTP
+            Promise.all(urls.map(url =>
+                fetch(url)
+                    .then(response => response.json())
+            ))
+                .then(dataArray => {
+                    // dataArray contient les résultats de toutes les requêtes
+                    var marquesData = dataArray[0]; // Résultat de la première requête
+                    var naturesData = dataArray[1];
+                    var numerosData = dataArray[2];
+                    // Boucle pour créer les lignes
+                    for (let i = 1; i <= nombreDeLignes; i++) {
+                        // Créer une nouvelle ligne
+                        var nouvelleLigne = table.insertRow();
+    
+                        // Créer des cellules avec IDs et names dynamiques
+                        var champs = ["nature", "marque", "numero", "details", "prix", "quantite"];
+                        for (let champ of champs) {
+                            if(champ === "nature"){
+                                var cellule = nouvelleLigne.insertCell();
+                                var selectHtml = `<select name="${champ}_${i}" id="${champ}_${i}" required style="font-size: 15px;">`;
+    
+                                // Ajouter les options de sélection basées sur la liste des marques
+                                naturesData.natures.forEach(function (nature) {
+                                    selectHtml += `<option value="${nature}">${nature}</option>`;
+                                });
+    
+                                selectHtml += `</select>`;
+                                cellule.innerHTML = selectHtml;
+                            } else if (champ === "marque") {
+                                var cellule = nouvelleLigne.insertCell();
+                                var selectHtml = `<select name="${champ}_${i}" id="${champ}_${i}" required style="font-size: 15px;">`;
+    
+                                // Ajouter les options de sélection basées sur la liste des marques
+                                marquesData.marques.forEach(function (marque) {
+                                    selectHtml += `<option value="${marque}">${marque}</option>`;
+                                });
+    
+                                selectHtml += `</select>`;
+                                cellule.innerHTML = selectHtml;
+                            }else if (champ === "numero") {
+                                var cellule = nouvelleLigne.insertCell();
+                                var selectHtml = `<select name="${champ}_${i}" id="${champ}_${i}" required style="font-size: 15px;">`;
+    
+                                // Ajouter les options de sélection basées sur la liste des marques
+                                numerosData.numeros.forEach(function (numero) {
+                                    selectHtml += `<option value="${numero}">${numero}</option>`;
+                                });
+    
+                                selectHtml += `</select>`;
+                                cellule.innerHTML = selectHtml;
+                            }
+                            
+                            else if(champ === "prix" || champ === "quantite"){
+                                var cellule = nouvelleLigne.insertCell();
+                                cellule.innerHTML = `<input type="number" oninput="calculer()" name="${champ}_${i}" id="${champ}_${i}" required style="font-size: 15px; max-width: 100px;" />`;
+                            }
+                            else if(champ === "details"){
+                                var cellule = nouvelleLigne.insertCell();
+                                cellule.innerHTML = `<input type="text" name="${champ}_${i}" id="${champ}_${i}" style="font-size: 15px; max-width: 100px;" />`;
+                            }
+                            else {
+                                var cellule = nouvelleLigne.insertCell();
+                                cellule.innerHTML = `<input type="text" name="${champ}_${i}" id="${champ}_${i}" required style="font-size: 15px; max-width: 100px;" />`;
+                            }
+                        }
+    
+                        // Ajouter une cellule pour le résultat
+                        var resultatCellule = nouvelleLigne.insertCell();
+                        resultatCellule.id = `resultat_${i}`;
+                    }
+    
+                    // Fonction pour calculer le montant total
+                    function calculer() {
+                        var total = 0;
+                        for (let i = 1; i <= nombreDeLignes; i++) {
+                            // Récupérer les valeurs des champs "prix" et "Quantite"
+                            var prix = parseFloat(document.getElementById(`prix_${i}`).value) || 1;
+                            var quantite = parseInt(document.getElementById(`quantite_${i}`).value) || 1;
+    
+                            // Calculer le montant total
+                            var montantTotal = prix * quantite;
+    
+                            total = total + montantTotal;
+    
+                            // Mettre à jour la cellule "resultat" pour cette ligne
+                            document.getElementById(`resultat_${i}`).textContent = montantTotal;
+                        }
+                        document.getElementById(`resul`).textContent = total;
+                        var montant_verse = document.getElementById(`montant_verse`).value || 1;
+                        var reste = total - montant_verse;
+                        document.getElementById(`reste`).textContent = reste;
+                    }
+    
+                    // Associer la fonction calculer() aux événements de changement dans les champs "prix" et "Quantite"
+                    for (let i = 1; i <= nombreDeLignes; i++) {
+                        document.getElementById(`prix_${i}`).addEventListener("input", calculer);
+                        document.getElementById(`quantite_${i}`).addEventListener("input", calculer);
+                        document.getElementById(`montant_verse`).addEventListener("input", calculer);
+                    }
+                })
+                .catch(error => console.error('Erreur lors de la récupération des marques:', error));
+        });
+    });
+    
+    </script>
+  </head>
+  <body>
+    {% include 'header.html'%}
+    <main>
+      <section>
+        {% include 'sidebar.html'%}
+        <div class="right">
+          <div><h1 style="color:red;">SORTIE</h1></div>
+          <form action="{% url 'myapp:sortie' %}" method="post">
+            {% csrf_token %}
+          <table
+            class="table"
+            border="2"
+            align="center"
+            style="border-collapse: collapse"
+          >
+            <thead>
+              <tr>
+                <td><label for="client">NOM CLIENT</label></td>
+                <td><label for="contact">CONTACT</label></td>
+                <td><label for="montant_verse">MONTANT VERSE</label></td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="font-style: italic;"><input type="text" name="name_client" id="client" required placeholder="Nom du client"></td>
+                <td style="font-style: italic;"><input type="tel" name="contact_client" required id="contact" placeholder="Contact du client"></td>
+                <td style="font-style: italic;"><input type="number" name="montant_paye" required id="montant_verse" oninput="calculer()" placeholder="Montant versé du client"></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="resultat">
+            <div class="all" style="margin-right: 20px">
+              <label
+              align="center"
+              for="date"
+              style="font-weight: bold; font-size: 25px"
+              >Date :
+              </label>
+              <input
+              type="date"
+              id="date"
+              align="center"
+              required
+              name="date"
+              style="font-size: 20px"
+              />&nbsp;&nbsp;
+              <label for="nombre_de_lignes" id="label">Nombre de ligne : </label>
+              <input type="number" name="nombre_de_lignes" id="nombre_de_lignes">&nbsp;&nbsp;
+              <input required type="button" id="addRowBtn" value="Ajouter">&nbsp;&nbsp;
+              <br><br>
+              {% if quantite_null %}
+                <h4 style="color:red">{{quantite_null}}</h4>
+              {% endif %}
+
+              {% if message %}
+                <h4 style="color:red">{{message}}</h4>
+              {% endif %}
+
+              {% if error_pneu %}
+                <h4 style="color:red">{{error_pneu}}</h4>
+              {% endif %}
+              <table id="tableID">
+                <thead>
+                  <tr>
+                    <td><label>Nature</label></td>
+                    <td><label>Marque</label></td>
+                    <td><label>Numero</label></td>
+                    <td><label>Details</label></td>
+                    <td><label>Prix</label></td>
+                    <td><label >Quantite</label></td>
+                    <td><label>Montant</label></td>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+              <div class="ui">
+                <input type="reset" class="annuler" value="Annuler" />
+                <input type="submit" class="save" value="Enregistrer" />
+              </div>
+            </div>
+          </form>
+            <div class="total">
+              <span>TOTAL</span>
+              <div class="boite"> <span id="resul"></span></div>
+              <span>Reste</span>
+              <div class="boite" style="background-color: green; color: #fff">
+                <span id="reste"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer></footer>
+    {% comment %} <script src="{% static 'JS/sortie.js' %}"></script> {% endcomment %}
+    
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
+    ></script>
+  </body>
+</html>

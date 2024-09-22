@@ -1,0 +1,32 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CONNECTEZ-VOUS</title>
+    <link rel="stylesheet" href="{% static 'CSS/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'CSS/connexion.css' %}" />
+  </head>
+  <body>
+    {% include 'header.html'%}
+    <main>
+
+      <div class="login-container">
+        {% if message %}
+        <h4 style="color:red;">{{ message }}</h4>
+        {% endif %}
+        <form action="{% url 'myapp:PageConnexion' %}" method="post" class="login-form">
+          {% csrf_token %}
+            <label for="username">Nom d'utilisateur</label>
+            <input type="text" id="username" name="username" required>
+
+            <label for="password">Mot de passe</label>
+            <input type="password" id="password" name="password" required>
+
+            <input type="submit" value="Se Connecter">
+        </form>
+     </div>
+
+  </body>
+</html>

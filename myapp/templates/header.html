@@ -1,0 +1,21 @@
+{% load static %}
+<header>
+    <nav>
+      <ul>
+        <li><img src="{% static 'IMAGES/EZK_WHITE.png' %}" alt="EZK" title="EZK" /></li>
+        <li><a href="{% url 'myapp:entre' %}">ENTREE</a></li>
+        <li><a href="{% url 'myapp:stock' %}">STOCK</a></li>
+        <li><a href="{% url 'myapp:sortie' %}">SORTIE</a></li>
+        <li>
+          TREICHVILLE&nbsp;<ion-icon name="caret-down-outline"></ion-icon>
+        </li>
+        <li>
+        <form action="{% url 'myapp:logout' %}" method="post" id="logoutForm">
+            {% csrf_token %}
+          <a href="javascript:document.getElementById('logoutForm').submit()" class="btn btn-sm btn-light-primary font-weight-bolder py-2 px-5">Se déconnecter</a>
+        </form>
+        </li>
+      </ul>
+    </nav>
+    <div class="after"></div>
+  </header>

@@ -1,0 +1,316 @@
+* {
+  font-family: "Times News Roman";
+}
+
+/* body{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+} */
+main {
+  padding-top: 120px;
+}
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 1;
+}
+
+header nav ul {
+  margin-top: 0;
+}
+
+nav {
+  background-color: #0e0bed;
+}
+.after {
+  width: 100%;
+  height: 7px;
+  background-color: red;
+  /* margin-bottom: 20px; */
+}
+nav ul {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin-bottom: 0;
+}
+nav ul li img {
+  width: 130px;
+  margin-top: 10px;
+}
+nav ul li {
+  list-style: none;
+  color: #fff;
+  font-size: 25px;
+}
+
+nav ul li a {
+  position: relative;
+  text-decoration: none;
+  color: #fff;
+  font-size: 25px;
+  font-style: normal;
+  /* border: none; */
+  transition: color 2s ease;
+}
+
+nav ul li a::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: rgb(97, 243, 0);
+  transition: width 1s ease; /* Transition pour l'effet d'underline */
+}
+
+nav ul li a:hover::after {
+  width: 100%; /* La largeur passe à 100% au survol */
+}
+
+nav ul li a:hover {
+  color: rgb(97, 243, 0);
+}
+nav ul li .icon {
+  margin-top: 0;
+  font-size: 25px;
+}
+
+main section {
+  /* margin-top: 25px; */
+  display: flex;
+  
+}
+
+main section .left h2,
+main section .left h2 a:visited {
+  text-decoration: underline;
+  color: blue;
+}
+
+main section .left {
+  margin-top: 130px;
+  text-align: center;
+  flex: 1;
+  border: solid blue 5px;
+  margin-right: 15px;
+  margin-left: 5px;
+  border-radius: 25px;
+  padding-top: 0;
+  height: 100%;
+}
+
+main section .right {
+  flex: 8;
+  /* margin-right: 10px; */
+  margin-left: 15px;
+}
+
+main section .right .search {
+  /* border: solid black 2px; */
+  margin-bottom: 10px;
+  font-size: 20px;
+}
+
+main section .right .search input[type="text"] {
+  text-align: center;
+}
+
+main section .right .search select,
+main section .right .search input[type="submit"],
+main section .right .search input[type="text"] {
+  font-size: 15px;
+}
+
+main section .right .resultat {
+  display: flex;
+}
+
+/* main section .right .resultat .other{
+    flex: 1;
+} */
+
+main section .right .resultat .other .icon_plus {
+  margin-top: 15px;
+}
+
+main section .right .resultat .other .icon_plus .plus {
+  font-size: 40px;
+  margin-left: 30px;
+  margin-right: 30px;
+  cursor: pointer;
+}
+
+main section .right .resultat .all {
+  flex: 8;
+}
+
+main section .right .resultat .total {
+  text-align: center;
+  padding: 10px;
+  font-size: 20px;
+  flex: 2;
+}
+
+.date {
+  border: solid 2px black;
+  padding: 5px;
+  margin-right: 20px;
+  margin-top: 7px;
+  margin-bottom: 7px;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+main section .right .resultat .total .boite {
+  padding: 5px;
+  /* text-align: center;
+    vertical-align: middle; */
+  border: solid 1px black;
+  margin-bottom: 10px;
+}
+
+.search a button {
+  /* border-collapse: collapse; */
+  /* border: 2px solid black; */
+  position: relative;
+  right: -705px;
+  margin-bottom: 3px;
+  font-size: 16px;
+  background-color: #fff;
+  text-transform: uppercase;
+  border-radius: 10px;
+  padding: 5px;
+  cursor: pointer;
+}
+
+main section .right .resultat .all table {
+  border-collapse: collapse;
+  width: 100%; /* Ajuste la largeur du tableau selon tes besoins */
+  border: 2px solid black;
+  /* border-radius: 8px; */
+}
+
+main section .right .resultat .all table,
+main section .right .resultat .all table td {
+  border: 2px solid black;
+  /* border-radius: 20px; */
+}
+
+main section .right .resultat .all table thead {
+  border: 2px solid black;
+  background-color: #f2f2f2; /* Ajoute une couleur de fond pour les en-têtes */
+}
+
+main section .right .resultat .all table td {
+  padding: 8px; /* Ajoute un peu de marge interne pour améliorer l'apparence */
+}
+
+.credit {
+  background-color: red;
+  color: #fff;
+}
+.solde {
+  background-color: green;
+  color: #fff;
+}
+
+.debit {
+  background-color: blue;
+  color: #fff;
+}
+
+.right h2 {
+  margin-bottom: 1px;
+  margin-top: 1px;
+}
+
+.right h3 {
+  font-size: 30px;
+  margin: 4px 0 10px 0;
+  font-style: italic;
+  margin-bottom: 0;
+}
+
+.search a,
+.search a:visited {
+  color: black;
+  text-decoration: none;
+}
+
+.right .table {
+  margin-bottom: 9px;
+  font-size: 20px;
+  text-align: center;
+}
+
+.right .table thead tr td,
+.table tbody tr td {
+  padding: 10px;
+  font-weight: bold;
+}
+
+.reste {
+  background-color: green;
+  color: #fff;
+}
+
+.current{
+  text-decoration: underline;
+}
+
+.sortie:hover,
+.stock:hover,
+.entre:hover {
+  text-decoration: none;
+}
+
+.ui {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.annuler,
+.save {
+  padding: 8px;
+  color: #fff;
+  font-size: 17px;
+  border-radius: 15px;
+  cursor: pointer;
+}
+
+.annuler {
+  border: solid 2px red;
+  background-color: red;
+}
+
+.save {
+  border: solid 2px rgb(3, 218, 3);
+  background-color: rgb(3, 218, 3);
+}
+
+.ajout {
+  margin-bottom: 10px;
+  font-size: 22px;
+  width: 510px;
+  position: relative;
+  left: 440px;
+  top: 0;
+}
+.ajout button {
+  font-size: 10px;
+  border-radius: 5px;
+  padding: 2px;
+  background-color: black;
+  color: #fff;
+}
+
+.ajout button .add {
+  font-size: 14px;
+}
